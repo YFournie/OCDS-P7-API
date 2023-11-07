@@ -1,0 +1,4 @@
+Flask
+pandas
+pickleshare
+scikit-learn==1.2.2
