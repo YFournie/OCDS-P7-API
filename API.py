@@ -12,9 +12,8 @@ from sklearn.neighbors import NearestNeighbors
 app = Flask(__name__)
 app.config["DEBUG"] = True
 
-path = "../Données/"
 # On récupère notre jeu de test, avec les identifiants des clients
-clients_raw = pd.read_csv(path + "smaller_test_8.csv")
+clients_raw = pd.read_csv("smaller_test_8.csv")
 clients = clients_raw.sort_values(by = "SK_ID_CURR")
 
 # On récupère le modèle enregistré
