@@ -19,6 +19,33 @@ clients = clients_raw.sort_values(by = "SK_ID_CURR")
 # On récupère le modèle enregistré
 model = pickle.load(open('selected_model.sav', 'rb'))
 
+#Fonction utile pour plus tard
+def get_client_feats(clients, id):
+    """
+    Gives us the list of features for our specific client id
+    
+    Parameters
+    ----------
+    clients : DataFrame
+        The dataframe that contains the features for all the clients
+    id : int
+        the id of the client we are looking for
+
+    Returns
+    -------
+    array
+        An array with only one row : the list of the feature's values for our client.
+
+    """
+    if not isinstance (clients, pd.DataFrame):
+        raise TypeError("The first argument must be a dataframe")
+    elif id not in clients["SK_ID_CURR"].values :
+        raise ValueError("this id does not belong to any client we know of")
+    else: 
+        client = clients.loc[clients["SK_ID_CURR"] == id,:].drop(columns = ["SK_ID_CURR"]).values
+        return client
+
+
 @app.route('/predict_proba', methods = ['GET'])
 def prob():
     # Check if an ID was provided as part of the URL.
@@ -59,13 +86,8 @@ def clifeats():
     else:
         return "Error: No id field provided. Please specify an id."
         
-    # Now we check if the id is valid (is it in test_8 ?)
-    if id not in clients["SK_ID_CURR"].values :
-        return "Error : Invalid id provided. id not in testing set"
-    else:
-        # We select the good row and drop the id, then we scale the values
-        client = clients.loc[clients["SK_ID_CURR"] == id,:].drop(columns = ["SK_ID_CURR"]).values
-        prep_client = model[:-1].transform(client)
+    client = get_client_feats(clients, id)
+    prep_client = model[:-1].transform(client)
         
     return prep_client.tolist()
 
@@ -80,12 +102,7 @@ def clientfeats():
     else:
         return "Error: No id field provided. Please specify an id."
         
-    # Now we check if the id is valid (is it in test_8 ?)
-    if id not in clients["SK_ID_CURR"].values :
-        return "Error : Invalid id provided. id not in testing set"
-    else:
-        # We select the good row and drop the id, then we scale the values
-        client = clients.loc[clients["SK_ID_CURR"] == id,:].drop(columns = ["SK_ID_CURR"]).values
+    client = get_client_feats(clients, id)
         
     return client.tolist()
 
@@ -115,4 +132,4 @@ def smilarclients():
     return df_neighbors.to_dict()
     
     
-#app.run(debug=True, use_reloader=False)
+# app.run(debug=True, use_reloader=False)
