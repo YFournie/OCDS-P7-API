@@ -14,7 +14,7 @@ app.config["DEBUG"] = True
 
 # On récupère notre jeu de test, avec les identifiants des clients
 clients_raw = pd.read_csv("smallest_test_8.csv")
-clients = clients_raw.sort_values(by = "SK_ID_CURR").reset_index()
+clients = clients_raw.sort_values(by = "SK_ID_CURR").reset_index(drop=True)
 
 # On récupère le modèle enregistré
 model = pickle.load(open('selected_model.sav', 'rb'))
