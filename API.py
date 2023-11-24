@@ -14,7 +14,7 @@ app.config["DEBUG"] = True
 
 # On récupère notre jeu de test, avec les identifiants des clients
 clients_raw = pd.read_csv("smallest_test_8.csv")
-clients = clients_raw.sort_values(by = "SK_ID_CURR")
+clients = clients_raw.sort_values(by = "SK_ID_CURR").reset_index()
 
 # On récupère le modèle enregistré
 model = pickle.load(open('selected_model.sav', 'rb'))
@@ -132,4 +132,4 @@ def smilarclients():
     return df_neighbors.to_dict()
 
 
-# app.run(debug=True, use_reloader=False)
+app.run(debug=True, use_reloader=False)
