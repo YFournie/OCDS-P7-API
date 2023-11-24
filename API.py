@@ -132,4 +132,4 @@ def smilarclients():
     return df_neighbors.to_dict()
 
 
-app.run(debug=True, use_reloader=False)
+#app.run(debug=True, use_reloader=False)
